@@ -12,6 +12,10 @@ const categorySchema=new mongoose.Schema({
     description:{
         type:String,
         required:[true,'description is required']
+    },
+    long_description:{
+        type:String,
+        required:[true,'description is required']
     }
 });
 

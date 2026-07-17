@@ -2,14 +2,12 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    // User who placed the order
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "userModel",
       required: true,
     },
 
-    // Products in the order
     items: [
       {
         product: {
@@ -29,7 +27,6 @@ const orderSchema = new mongoose.Schema(
       },
     ],
 
-    // Shipping Address
     shippingAddress: {
       fullName: {
         type: String,
@@ -57,21 +54,18 @@ const orderSchema = new mongoose.Schema(
       },
     },
 
-    // Payment Method
     paymentMethod: {
       type: String,
       enum: ["Cash on Delivery", "Card", "JazzCash", "EasyPaisa"],
       default: "Cash on Delivery",
     },
 
-    // Payment Status
     paymentStatus: {
       type: String,
       enum: ["Pending", "Paid", "Failed"],
       default: "Pending",
     },
 
-    // Order Status
     orderStatus: {
       type: String,
       enum: [
@@ -84,25 +78,21 @@ const orderSchema = new mongoose.Schema(
       default: "Pending",
     },
 
-    // Total Amount
     totalPrice: {
       type: Number,
       required: true,
     },
 
-    // Delivery Charges
     shippingCharges: {
       type: Number,
       default: 0,
     },
 
-    // Tax
     tax: {
       type: Number,
       default: 0,
     },
 
-    // Final Amount
     grandTotal: {
       type: Number,
       required: true,

@@ -17,6 +17,10 @@ const productSchema=new mongoose.Schema({
         type:mongoose.SchemaTypes.ObjectId,
         required:[true,'category id is required'],
         ref:'categoryModel'
+    },
+    long_description:{
+        type:String,
+        required:[true,'description is required']
     }
 });
 
