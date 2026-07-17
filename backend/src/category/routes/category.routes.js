@@ -2,7 +2,7 @@ const express=require("express");
 const authMiddleware = require("../../auth/middlewares/auth.middleware");
 const router=express.Router();
 
-const { createCategory, getAllCategories, getCategory, updateCategory, deleteCategory } = require("../controllers/category.controller");
+const { createCategory, getAllCategories, getCategory, updateCategory, deleteCategory } = require("../controller/category.controller");
 
 router.post("/create",authMiddleware,createCategory);
 router.get("/get",authMiddleware,getAllCategories);
