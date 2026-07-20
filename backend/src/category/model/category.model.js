@@ -11,13 +11,15 @@ const categorySchema=new mongoose.Schema({
     },
     description:{
         type:String,
-        required:[true,'description is required']
+        required:[false,'description is required']
     },
     long_description:{
         type:String,
-        required:[true,'description is required']
-    }
-});
+        required:[false,'description is required']
+    },
+    status: { type: String, default: 'Active' },
+    productsCount: { type: Number, default: 0 }
+}, { timestamps: true });
 
 const categoryModel=mongoose.model('category',categorySchema);
 

@@ -1,0 +1,113 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { createAdmin } from '../../services/dataService';
+import FormInput from '../../components/FormInput';
+import FormSelect from '../../components/FormSelect';
+import ImageUpload from '../../components/ImageUpload';
+import Breadcrumb from '../../components/Breadcrumb';
+import { toast } from 'react-toastify';
+import { Loader2, Save } from 'lucide-react';
+
+export default function AddAdmin() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
+
+  const { register, handleSubmit, watch, formState: { errors } } = useForm({
+    defaultValues: { status: 'Active', role: 'Admin' },
+  });
+
+  const password = watch('password');
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      const avatar = image 
+        ? URL.createObjectURL(image) 
+        : `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=0F6CBD&color=fff`;
+        
+      await createAdmin({ ...data, avatar, lastLogin: 'Never' });
+      toast.success('Admin created successfully');
+      navigate('/admins');
+    } catch (error) {
+      toast.error('Failed to create admin');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <Breadcrumb items={[{ label: 'Admins', href: '/admins' }, { label: 'Add Admin' }]} />
+      <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Add New Admin</h1>
+
+      <div className="rounded-xl bg-white p-6 shadow-subtle dark:bg-slate-800">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <div className="space-y-6 lg:col-span-2">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <FormInput label="Full Name" name="name" register={register} errors={errors} required />
+                <FormInput label="Email Address" type="email" name="email" register={register} errors={errors} required />
+                <FormInput label="Phone Number" name="phone" register={register} errors={errors} required />
+                <FormSelect
+                  label="Role"
+                  name="role"
+                  register={register}
+                  errors={errors}
+                  options={[
+                    { label: 'Super Admin', value: 'Super Admin' },
+                    { label: 'Admin', value: 'Admin' },
+                    { label: 'Manager', value: 'Manager' },
+                    { label: 'Sales Executive', value: 'Sales Executive' },
+                  ]}
+                />
+                <FormInput
+                  label="Password"
+                  type="password"
+                  name="password"
+                  register={register}
+                  errors={errors}
+                  required
+                />
+                <FormInput
+                  label="Confirm Password"
+                  type="password"
+                  name="confirmPassword"
+                  register={register}
+                  errors={errors}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <FormSelect
+                label="Status"
+                name="status"
+                register={register}
+                errors={errors}
+                options={[{ label: 'Active', value: 'Active' }, { label: 'Inactive', value: 'Inactive' }]}
+              />
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Profile Image</label>
+                <ImageUpload onImageChange={setImage} />
+                <p className="mt-2 text-xs text-slate-500">Leave blank to use an auto-generated avatar.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-end gap-3 border-t border-slate-100 pt-6 dark:border-slate-700">
+            <button type="button" onClick={() => navigate('/admins')} className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700">
+              Cancel
+            </button>
+            <button type="submit" disabled={loading} className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-70">
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              Save Admin
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}

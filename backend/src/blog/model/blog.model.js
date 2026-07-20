@@ -8,17 +8,23 @@ const blogSchema=new mongoose.Schema({
     },
     blog_image:{
         type:String,
-        required:[true,'Blog image is required']
+        required:[false,'Blog image is required']
     },
     description:{
         type:String,
-        required:[true,'Description is required']
+        required:[false,'Description is required']
     },
     long_description:{
         type:String,
-        required:[true,'long Description is required']
-    }
-})
+        required:[false,'long Description is required']
+    },
+    slug: { type: String },
+    author: { type: String, default: 'Admin' },
+    publishDate: { type: String },
+    status: { type: String, default: 'Draft' },
+    metaTitle: { type: String },
+    metaDescription: { type: String }
+}, { timestamps: true });
 
 const blogModel=mongoose.model('blog',blogSchema);
 

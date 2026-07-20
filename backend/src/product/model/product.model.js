@@ -11,18 +11,29 @@ const productSchema=new mongoose.Schema({
     },
     description:{
         type:String,
-        required:[true,'Description is required']
+        required:[false,'Description is required']
     },
     category_id:{
         type:mongoose.SchemaTypes.ObjectId,
-        required:[true,'category id is required'],
+        required:[false,'category id is required'],
         ref:'categoryModel'
+    },
+    categoryName:{
+        type:String,
+        required: false
     },
     long_description:{
         type:String,
-        required:[true,'description is required']
-    }
-});
+        required:[false,'description is required']
+    },
+    price: { type: Number },
+    discountPrice: { type: Number },
+    quantity: { type: Number },
+    sku: { type: String },
+    status: { type: String, default: 'Active' },
+    brand: { type: String },
+    unit: { type: String }
+}, { timestamps: true });
 
 const productModel=mongoose.model('product',productSchema);
 

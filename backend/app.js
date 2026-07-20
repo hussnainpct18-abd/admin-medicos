@@ -16,12 +16,14 @@ const productRoutes = require("./src/product/routes/product.routes");
 const categoryRoutes = require("./src/category/routes/category.routes");
 const blogRoutes = require("./src/blog/routes/blog.routes");
 const orderRoutes = require("./src/order/routes/order.routes");
+const userRoutes = require("./src/user/routes/user.routes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/users", userRoutes);
 
 // Health check
 app.get("/", (req, res) => {
