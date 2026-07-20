@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0F6CBD;
+  --color-secondary: #2BB673;
+  --color-background: #F5F8FC;
+  --color-accent: #E53935;
+  --color-card: #FFFFFF;
+  --radius-xl: 12px;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-slate-800 antialiased;
+  }
+}
+
+.shadow-subtle {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
