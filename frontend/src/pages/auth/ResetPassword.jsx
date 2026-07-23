@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { Lock, Eye, EyeOff, Loader2, ArrowLeft } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 export default function ResetPassword() {
   const { resetPassword } = useAuth();
   const navigate = useNavigate();
+  const { token } = useParams();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +19,7 @@ export default function ResetPassword() {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      await resetPassword('dummy-token', data.password);
+      await resetPassword(token || 'dummy-token', data.password);
       toast.success('Password has been reset successfully!');
       navigate('/login');
     } catch (err) {

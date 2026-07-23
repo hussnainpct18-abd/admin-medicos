@@ -26,7 +26,7 @@ export default function AddCategory() {
     }
     setLoading(true);
     try {
-      await createCategory({ ...data, image: URL.createObjectURL(image) });
+      await createCategory({ ...data, image });
       toast.success('Category created successfully');
       navigate('/categories');
     } catch (error) {

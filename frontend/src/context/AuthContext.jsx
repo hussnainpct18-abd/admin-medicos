@@ -1,22 +1,14 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 const AuthContext = createContext();
-
-const DUMMY_USER = {
-  id: 1,
-  name: 'John Mitchell',
-  email: 'admin@medicos.com',
-  role: 'Super Admin',
-  avatar: 'https://ui-avatars.com/api/?name=John+Mitchell&background=0F6CBD&color=fff',
-};
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('authUser');
+    const stored = localStorage.getItem('authUser') || sessionStorage.getItem('authUser');
     if (stored) {
       setUser(JSON.parse(stored));
     }
@@ -24,44 +16,49 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password, remember) => {
-    // Simulate API call
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (email === 'admin@medicos.com' && password === 'password') {
-          setUser(DUMMY_USER);
-          if (remember) {
-            localStorage.setItem('authUser', JSON.stringify(DUMMY_USER));
-          } else {
-            sessionStorage.setItem('authUser', JSON.stringify(DUMMY_USER));
-          }
-          resolve(DUMMY_USER);
-        } else {
-          reject(new Error('Invalid email or password'));
-        }
-      }, 1500);
-    });
+    try {
+      const res = await api.post('/auth/login', { email, password });
+      const { user: authUser } = res.data;
+      setUser(authUser);
+      if (remember) {
+        localStorage.setItem('authUser', JSON.stringify(authUser));
+      } else {
+        sessionStorage.setItem('authUser', JSON.stringify(authUser));
+      }
+      return authUser;
+    } catch (err) {
+      throw new Error(err.response?.data?.message || 'Login failed');
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('authUser');
-    sessionStorage.removeItem('authUser');
+  const logout = async () => {
+    try {
+      await api.get('/auth/logout');
+    } catch (err) {
+      console.error('Logout error:', err);
+    } finally {
+      setUser(null);
+      localStorage.removeItem('authUser');
+      sessionStorage.removeItem('authUser');
+    }
   };
 
   const forgotPassword = async (email) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ message: 'Password reset link sent to ' + email });
-      }, 1500);
-    });
+    try {
+      const res = await api.post('/auth/forgot-password', { email });
+      return res.data;
+    } catch (err) {
+      throw new Error(err.response?.data?.message || 'Failed to send reset link');
+    }
   };
 
   const resetPassword = async (token, password) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ message: 'Password has been reset successfully' });
-      }, 1500);
-    });
+    try {
+      const res = await api.post('/auth/reset-password', { token, password });
+      return res.data;
+    } catch (err) {
+      throw new Error(err.response?.data?.message || 'Failed to reset password');
+    }
   };
 
   return (

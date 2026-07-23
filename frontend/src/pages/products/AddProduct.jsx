@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { createProduct, getCategories } from '../../services/dataService';
+import { useProducts } from './products.hook';
+import { useCategories } from '../categories/categories.hook';
 import FormInput from '../../components/FormInput';
 import FormSelect from '../../components/FormSelect';
 import FormTextarea from '../../components/FormTextarea';

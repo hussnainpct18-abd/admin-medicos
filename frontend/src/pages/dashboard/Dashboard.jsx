@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { getDashboardStats, getMonthlySales, getOrderStatusChart, getActivityTimeline } from '../../services/dataService';
+import { useDashboard } from './dashboard.hook';
 import StatCard from '../../components/StatCard';
 import ChartCard from '../../components/ChartCard';
 import StatusBadge from '../../components/StatusBadge';
@@ -8,19 +7,23 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsToolti
 import { motion } from 'framer-motion';
 
 export default function Dashboard() {
-  const [stats, setStats] = useState(null);
-  const [salesData, setSalesData] = useState([]);
-  const [pieData, setPieData] = useState([]);
-  const [timeline, setTimeline] = useState([]);
+  const { stats, salesData, pieData, timeline, loading, error, refresh } = useDashboard();
 
-  useEffect(() => {
-    getDashboardStats().then(setStats);
-    getMonthlySales().then(setSalesData);
-    getOrderStatusChart().then(setPieData);
-    getActivityTimeline().then(setTimeline);
-  }, []);
+  if (loading && !stats) {
+    return <div className="p-8 text-center text-slate-500">Loading dashboard...</div>;
+  }
 
-  if (!stats) return <div className="p-8 text-center text-slate-500">Loading dashboard...</div>;
+  if (error) {
+    return (
+      <div className="p-8 text-center text-red-500 space-y-4">
+        <p className="font-semibold text-lg">Failed to load dashboard data</p>
+        <p className="text-sm text-slate-400">{error}</p>
+        <button onClick={refresh} className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
