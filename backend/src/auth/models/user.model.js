@@ -21,7 +21,9 @@ const userSchema=new mongoose.Schema({
     role: { type: String, default: 'Admin' },
     status: { type: String, default: 'Active' },
     avatar: { type: String },
-    lastLogin: { type: String }
+    lastLogin: { type: String },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date }
 }, { timestamps: true });
 
 const userModel=mongoose.model("user",userSchema);
