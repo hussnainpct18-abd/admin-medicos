@@ -13,27 +13,102 @@ export const getCategoryDistribution = async () => { await delay(); return categ
 export const getActivityTimeline = async () => { await delay(); return activityTimeline; };
 
 // ─── Helpers to normalize _id to id ────────────────────
-const normalize = (item) => ({ ...item, id: item._id });
+const normalize = (item) => {
+  const normalized = { ...item, id: item._id };
+  // For categories
+  if (item.title !== undefined) normalized.name = item.title;
+  if (item.category_image !== undefined) {
+    normalized.image = item.category_image ? `http://localhost:4001${item.category_image}` : '';
+  }
+  // For products
+  if (item.product_image !== undefined) {
+    normalized.image = item.product_image ? `http://localhost:4001${item.product_image}` : '';
+  }
+  // For blogs
+  if (item.blog_image !== undefined) {
+    normalized.image = item.blog_image ? `http://localhost:4001${item.blog_image}` : '';
+  }
+  return normalized;
+};
 
 // ─── Categories ────────────────────────────────────────
 export const getCategories = async () => { const res = await api.get('/categories/get'); return res.data.categories.map(normalize); };
 export const getCategoryById = async (id) => { const res = await api.get(`/categories/get/${id}`); return normalize(res.data.category); };
-export const createCategory = async (data) => { const res = await api.post('/categories/create', { ...data, category_image: data.image }); return normalize(res.data.category); };
-export const updateCategory = async (id, data) => { const res = await api.put(`/categories/update/${id}`, data); return normalize(res.data.category); };
+export const createCategory = async (data) => {
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (key === 'image' && value) formData.append('category_image', value);
+    else if (key === 'name') formData.append('title', value);
+    else formData.append(key, value);
+  });
+  const res = await api.post('/categories/create', formData);
+  return normalize(res.data.category);
+};
+export const updateCategory = async (id, data) => {
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (key === 'image' && value) {
+      if (typeof value !== 'string') formData.append('category_image', value);
+    }
+    else if (key === 'name') formData.append('title', value);
+    else formData.append(key, value);
+  });
+  const res = await api.put(`/categories/update/${id}`, formData);
+  return normalize(res.data.category);
+};
 export const deleteCategory = async (id) => { await api.delete(`/categories/delete/${id}`); return { success: true }; };
 
 // ─── Products ──────────────────────────────────────────
 export const getProducts = async () => { const res = await api.get('/products/get'); return res.data.products.map(normalize); };
 export const getProductById = async (id) => { const res = await api.get(`/products/get/${id}`); return normalize(res.data.product); };
-export const createProduct = async (data) => { const res = await api.post('/products/create', { ...data, product_image: data.image }); return normalize(res.data.product); };
-export const updateProduct = async (id, data) => { const res = await api.put(`/products/update/${id}`, data); return normalize(res.data.product); };
+export const createProduct = async (data) => {
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (key === 'image' && value) formData.append('product_image', value);
+    else if (key === 'name') formData.append('title', value);
+    else formData.append(key, value);
+  });
+  const res = await api.post('/products/create', formData);
+  return normalize(res.data.product);
+};
+export const updateProduct = async (id, data) => {
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (key === 'image' && value) {
+      if (typeof value !== 'string') formData.append('product_image', value);
+    }
+    else if (key === 'name') formData.append('title', value);
+    else formData.append(key, value);
+  });
+  const res = await api.put(`/products/update/${id}`, formData);
+  return normalize(res.data.product);
+};
 export const deleteProduct = async (id) => { await api.delete(`/products/delete/${id}`); return { success: true }; };
 
 // ─── Blogs ─────────────────────────────────────────────
 export const getBlogs = async () => { const res = await api.get('/blogs/get'); return res.data.blogs.map(normalize); };
 export const getBlogById = async (id) => { const res = await api.get(`/blogs/get/${id}`); return normalize(res.data.blog); };
-export const createBlog = async (data) => { const res = await api.post('/blogs/create', { ...data, blog_image: data.image }); return normalize(res.data.blog); };
-export const updateBlog = async (id, data) => { const res = await api.put(`/blogs/update/${id}`, data); return normalize(res.data.blog); };
+export const createBlog = async (data) => {
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (key === 'image' && value) formData.append('blog_image', value);
+    else formData.append(key, value);
+  });
+  const res = await api.post('/blogs/create', formData);
+  return normalize(res.data.blog);
+};
+export const updateBlog = async (id, data) => {
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (key === 'image' && value) {
+      if (typeof value !== 'string') formData.append('blog_image', value);
+    } else {
+      formData.append(key, value);
+    }
+  });
+  const res = await api.put(`/blogs/update/${id}`, formData);
+  return normalize(res.data.blog);
+};
 export const deleteBlog = async (id) => { await api.delete(`/blogs/delete/${id}`); return { success: true }; };
 
 // ─── Orders ────────────────────────────────────────────

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Upload, X, Image as ImageIcon } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -6,6 +6,12 @@ export default function ImageUpload({ label, onImageChange, currentImage, multip
   const [preview, setPreview] = useState(currentImage || null);
   const [previews, setPreviews] = useState([]);
   const fileRef = useRef(null);
+
+  useEffect(() => {
+    if (!multiple) {
+      setPreview(currentImage || null);
+    }
+  }, [currentImage, multiple]);
 
   const handleChange = (e) => {
     const files = e.target.files;

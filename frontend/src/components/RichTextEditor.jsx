@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Bold, Italic, Underline, List, ListOrdered, AlignLeft, AlignCenter, AlignRight, Link as LinkIcon, Image } from 'lucide-react';
+import { useRef, useEffect } from 'react';
+import { Bold, Italic, Underline, List, ListOrdered, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 const ToolButton = ({ icon: Icon, active, onClick, title }) => (
@@ -17,10 +17,18 @@ const ToolButton = ({ icon: Icon, active, onClick, title }) => (
 );
 
 export default function RichTextEditor({ label, value = '', onChange, placeholder = 'Write your content here...', className }) {
-  const [content, setContent] = useState(value);
+  const editorRef = useRef(null);
+
+  // Sync value prop into the contentEditable div whenever it changes from outside
+  // (e.g. when async data is loaded in edit pages). Only inject when the content
+  // actually differs to avoid resetting the cursor while the user is typing.
+  useEffect(() => {
+    if (editorRef.current && editorRef.current.innerHTML !== value) {
+      editorRef.current.innerHTML = value;
+    }
+  }, [value]);
 
   const handleChange = (e) => {
-    setContent(e.target.innerHTML);
     onChange?.(e.target.innerHTML);
   };
 
@@ -43,12 +51,12 @@ export default function RichTextEditor({ label, value = '', onChange, placeholde
         </div>
         {/* Editor */}
         <div
+          ref={editorRef}
           contentEditable
           suppressContentEditableWarning
           onInput={handleChange}
           data-placeholder={placeholder}
           className="min-h-[200px] bg-white px-4 py-3 text-sm text-slate-800 outline-none empty:before:text-slate-400 empty:before:content-[attr(data-placeholder)] dark:bg-slate-700 dark:text-white dark:empty:before:text-slate-400"
-          dangerouslySetInnerHTML={{ __html: value }}
         />
       </div>
     </div>

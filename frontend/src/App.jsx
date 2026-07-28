@@ -16,16 +16,19 @@ import ResetPassword from './pages/auth/ResetPassword';
 import Dashboard from './pages/dashboard/Dashboard';
 import Products from './pages/products/Products';
 import AddProduct from './pages/products/AddProduct';
+import EditProduct from './pages/products/EditProduct';
 import Categories from './pages/categories/Categories';
 import AddCategory from './pages/categories/AddCategory';
 import Blogs from './pages/blogs/Blogs';
 import AddBlog from './pages/blogs/AddBlog';
+import EditBlog from './pages/blogs/EditBlog';
 import Orders from './pages/orders/Orders';
 import OrderDetails from './pages/orders/OrderDetails';
 import AdminUsers from './pages/admins/AdminUsers';
 import AddAdmin from './pages/admins/AddAdmin';
 
 import PlaceholderPage from './components/PlaceholderPage';
+import EditCategory from './pages/categories/EditCategory';
 
 export default function App() {
   return (
@@ -54,17 +57,17 @@ export default function App() {
               {/* Categories */}
               <Route path="categories" element={<Categories />} />
               <Route path="categories/add" element={<AddCategory />} />
-              <Route path="categories/edit/:id" element={<PlaceholderPage title="Edit Category" />} />
+              <Route path="categories/edit/:id" element={<EditCategory title="Edit Category" />} />
 
               {/* Products */}
               <Route path="products" element={<Products />} />
               <Route path="products/add" element={<AddProduct />} />
-              <Route path="products/edit/:id" element={<PlaceholderPage title="Edit Product" />} />
+              <Route path="products/edit/:id" element={<EditProduct />} />
 
               {/* Blogs */}
               <Route path="blogs" element={<Blogs />} />
               <Route path="blogs/add" element={<AddBlog />} />
-              <Route path="blogs/edit/:id" element={<PlaceholderPage title="Edit Blog" />} />
+              <Route path="blogs/edit/:id" element={<EditBlog />} />
 
               {/* Orders */}
               <Route path="orders" element={<Orders />} />
