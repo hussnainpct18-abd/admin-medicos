@@ -2,7 +2,11 @@ const categoryModel = require("../model/category.model");
 
 async function createCategory(req, res) {
     try {
-        const { title, category_image, description, long_description } = req.body;
+        const { title, description, long_description } = req.body;
+        let category_image = req.body.category_image;
+        if (req.file) {
+            category_image = `/uploads/${req.file.filename}`;
+        }
         const category = await categoryModel.create({ title, category_image, description, long_description });
         res.status(201).json({ message: "Category created successfully", category });
     } catch (e) {
@@ -36,7 +40,11 @@ async function getCategory(req, res) {
 
 async function updateCategory(req, res) {
     try {
-        const category = await categoryModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        let updateData = { ...req.body };
+        if (req.file) {
+            updateData.category_image = `/uploads/${req.file.filename}`;
+        }
+        const category = await categoryModel.findByIdAndUpdate(req.params.id, updateData, { new: true });
         if (!category) {
             return res.status(404).json({ message: "Category not found" });
         }

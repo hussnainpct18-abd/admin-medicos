@@ -6,13 +6,16 @@ const path = require('path');
 const app = express();
 
 // Middlewares
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 const authRoutes = require('./src/auth/routes/auth.routes');

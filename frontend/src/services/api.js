@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:4000/api', // Point to the Node.js backend
+  baseURL: 'http://localhost:4001/api', // Point to the Node.js backend
   withCredentials: true, // Important for sending/receiving cookies (JWT)
 });
 

@@ -30,7 +30,9 @@ export default function EditCategory() {
           description: data.description,
           status: data.status,
         });
-        // keep existing image if any
+        if (data.image) {
+          setImage(data.image);
+        }
       } catch (e) {
         toast.error('Failed to load category');
       }
@@ -64,7 +66,7 @@ export default function EditCategory() {
             <FormTextarea label="Description" name="description" register={register} errors={errors} />
           </div>
           <div>
-            <ImageUpload label="Category Image" onImageChange={setImage} className="h-full" />
+            <ImageUpload label="Category Image" onImageChange={setImage} currentImage={image} className="h-full" />
           </div>
         </div>
         <div className="flex justify-end gap-3 border-t border-slate-100 pt-6 dark:border-slate-700">
@@ -80,3 +82,5 @@ export default function EditCategory() {
     </div>
   );
 }
+
+
