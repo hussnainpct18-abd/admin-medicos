@@ -23,13 +23,14 @@ const menuItems = [
     { label: 'Add Blog', path: '/blogs/add' },
     { label: 'View Blogs', path: '/blogs' },
   ]},
-  { label: 'Orders', icon: ShoppingCart, path: '/orders' },
   { label: 'Admin Users', icon: Users, path: '/admins', children: [
     { label: 'Add Admin', path: '/admins/add' },
     { label: 'View Admins', path: '/admins' },
   ]},
-  { label: 'Reports', icon: BarChart3, path: '/reports' },
-  { label: 'Settings', icon: Settings, path: '/settings' },
+  { label: 'Orders', icon: ShoppingCart, path: '/orders' },
+  
+  // { label: 'Reports', icon: BarChart3, path: '/reports' },
+  // { label: 'Settings', icon: Settings, path: '/settings' },
 ];
 
 function SidebarItem({ item, collapsed, closeMobile }) {
