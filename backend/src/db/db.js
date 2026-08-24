@@ -26,7 +26,7 @@ async function seedDefaultAdmin() {
 
 async function connectDB() {
     try {
-        const db = await mongoose.connect(process.env.MONGO_DB);
+        const db = await mongoose.connect(process.env.MONGO_URI);
         if (db) {
             console.log("Connected to database successfully");
             await seedDefaultAdmin();
